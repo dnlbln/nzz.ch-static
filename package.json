@@ -1,0 +1,19 @@
+{
+  "name": "nzz.ch-static",
+  "version": "1.0.0",
+  "description": "Static version of nzz.ch to use in projects to enable you to locally embed custom code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnlbln/nzz.ch-static.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dnlbln/nzz.ch-static/issues"
+  },
+  "homepage": "https://github.com/dnlbln/nzz.ch-static#readme"
+}
