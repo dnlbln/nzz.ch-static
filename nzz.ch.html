@@ -11,7 +11,36 @@
         <link data-n-head="ssr" rel="dns-prefetch" crossorigin="anonymous" href="//assets.static-nzz.ch" />
         <style>${NZZ_CSS}</style>
 
+        <script data-n-head="ssr" type="text/javascript" preserve="preserve">
+            function deferred(callback, readyCheck) {
+            var fallbackCheck = window.document.readyState === 'complete' && typeof deferredLoaded !== 'undefined';
+                if ((readyCheck === undefined && fallbackCheck) || (readyCheck && readyCheck())) {
+                    try {
+                        callback();
+                    } catch (e) {
+                        console.log(e);
+                    }
+                } else {
+                    setTimeout(function () {
+                        deferred(callback, readyCheck);
+                    }, 300);
+                }
+            }
+            deferred(function () {
+                Array.from(document.querySelectorAll('[media="none"]')).forEach(function (element) {
+                    element.setAttribute('media', 'all');
+                });
+            });
+
+        </script>
+
         ${CUSTOM_CSS}
+
+        <script data-n-head="ssr" type="application/ld+json" preserve="preserve" data-hid="ld-json-ld.1338084">
+            ${LD_JSON}
+        </script>
+
+        ${NZZ_C1_ACTIONS}
     </head>
     <body class="regular" data-n-head="%7B%22class%22:%7B%22ssr%22:%22regular%22%7D%7D">
         <div data-server-rendered="true" id="__nzz">
@@ -1855,5 +1884,8 @@
                 </div>
             </div>
         </div>
+        <script>
+            {SCRIPTS}
+        </script>
     </body>
 </html>

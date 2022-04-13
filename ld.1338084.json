@@ -1,0 +1,62 @@
+{
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www-stage.nzz.ch/zuerich/zueri-netto-null-2040-ld.1338084"
+    },
+    "headline": "Züri Netto Null 2040 | NZZ",
+    "datePublished": "2022-02-07T16:51:18.720+02:00",
+    "dateModified": "2022-04-12T12:58:38.056+02:00",
+    "publisher": {
+        "@type": "NewsMediaOrganization",
+        "name": "Neue Zürcher Zeitung",
+        "url": "https://www.nzz.ch",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.nzz.ch/logo.png",
+            "width": 413,
+            "height": 60
+        },
+        "contactPoint": [
+            {
+                "@type": "ContactPoint",
+                "telephone": "+41-44-2581000",
+                "contactType": "customer service"
+            }
+        ],
+        "sameAs": [
+            "https://www.facebook.com/nzz",
+            "https://www.twitter.com/nzz",
+            "https://www.youtube.com/channel/UCK1aTcR0AckQRLTlK0c4fuQ",
+            "https://www.linkedin.com/company/neue-zurcher-zeitung",
+            "https://www.instagram.com/nzz/",
+            "https://de.wikipedia.org/wiki/Neue_Z%C3%BCrcher_Zeitung",
+            "https://www.wikidata.org/wiki/Q658945",
+            "https://plus.google.com/+nzz/",
+            "http://www.freebase.com/m/041b43"
+        ],
+        "masthead": "https://www.nzz.ch/impressum/impressum-ld.148422",
+        "foundingDate": "1780"
+    },
+    "description": "NZZ Nachrichten, Hintergründe, Meinungen aus der Schweiz, International, Sport, Digital, Wirtschaft, Auto & mehr. Fundierte Berichterstattung rund um die Uhr.",
+    "isAccessibleForFree": false,
+    "hasPart": {
+        "@type": "WebPageElement",
+        "isAccessibleForFree": false,
+        "cssSelector": ".regwalled"
+    },
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://img-stage.nzz.ch/2022/02/09/1873fe2d-c015-4a05-9f3c-1be1a5e9f6b1.png?width=1200&height=675&fit=bound&quality=75&auto=webp&crop=2611,1469,x0,y106&wmark=nzz",
+        "width": 1200,
+        "height": 675
+    },
+    "author": [
+        {
+            "@type": "Person",
+            "name": "Fritz the Cat"
+        }
+    ],
+    "inLanguage": "de"
+}
