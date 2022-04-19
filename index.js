@@ -9,30 +9,22 @@ function getHtml(options = {}) {
         title,
         lead,
         content,
-        customCSS,
     } = options;
 
-    html = loadInitialHtml();
+    loadInitialHtml(options);
 
-    replaceNzzCSS();
-
-    html = html.replace('${CUSTOM_CSS}', customCSS);
-
+    // Must come after loading initial HTML.
     setNormalHeader();
     setArticleTitle(title);
+    setAuthor(author);
     setTopMaxiBoard();
     setHeaderCustomClasses();
-    if (lead) {
-        html = html.replace('${LEAD}', lead);
-    }
 
-    if (content) {
-        html = html.replace('${CONTENT}', content);
-    }
+    html = html.replace('${LEAD}', lead || '');
+    html = html.replace('${CONTENT}', content || '');
 
     return html;
 }
-
 
 function getLongFormVisualHtml(options = {}) {
     const {
@@ -40,15 +32,11 @@ function getLongFormVisualHtml(options = {}) {
         title,
         lead,
         content,
-        customCSS,
     } = options;
 
-    // Read out the website html.
-    html = loadInitialHtml();
-    replaceNzzCSS();
+    loadInitialHtml(options);
 
-    html = html.replace('${CUSTOM_CSS}', customCSS);
-
+    // Must come after loading initial HTML.
     setLongFormArticleHeader();
     setArticleTitle(title);
     setAuthor(author);
@@ -56,13 +44,8 @@ function getLongFormVisualHtml(options = {}) {
     setTopMaxiBoard('');
     setHeaderCustomClasses('header__stay-on-top--visual');
 
-    if (lead) {
-        html = html.replace('${LEAD}', lead);
-    }
-
-    if (content) {
-        html = html.replace('${CONTENT}', content);
-    }
+    html = html.replace('${LEAD}', lead || '');
+    html = html.replace('${CONTENT}', content || '');
 
     return html;
 }
@@ -73,21 +56,34 @@ module.exports = {
 };
 
 
-function loadInitialHtml() {
-    return fs.readFileSync(path.resolve(__dirname, 'nzz.ch.html'), 'utf8');
+function loadInitialHtml(options = {}) {
+    html = fs.readFileSync(path.resolve(__dirname, 'nzz.ch.html'), 'utf8');
+
+    replaceNzzCSS();
+    replaceExternalCustomCssLinks(options);
+    replaceExternalCustomRawCss(options);
+}
+
+function replaceExternalCustomRawCss(options = {}) {
+    html = html.replace('${EXTERNAL_CUSTOM_RAW_CSS}', options.customCssRaw || '');
+}
+
+function replaceExternalCustomCssLinks(options = {}) {
+    console.log(options);
+    html = html.replace('${EXTERNAL_CUSTOM_CSS_LINKS}', options.customCssLinks || '');
 }
 
 function replaceNzzCSS() {
     const nzzFonts = fs.readFileSync(path.resolve(__dirname, 'nzz.ch-fonts.css'), 'utf8');
-    const cssOverrides = fs.readFileSync(path.resolve(__dirname, 'nzz.ch-overrides.css'), 'utf8');
+    const customCSS = fs.readFileSync(path.resolve(__dirname, 'nzz.ch-custom.css'), 'utf8');
     let nzzCSS = fs.readFileSync(path.resolve(__dirname, 'nzz.ch.css'), 'utf8');
 
     // Set the fonts in the css file.
     nzzCSS = nzzCSS.replace('${NZZ_FONTS}', nzzFonts);
-    nzzCSS = nzzCSS.replace('${OVERRIDES}', cssOverrides);
 
     // Set the css in the HTML.
     html = html.replace('${NZZ_CSS}', nzzCSS);
+    html = html.replace('${CUSTOM_CSS}', customCSS);
 }
 
 function setNormalHeader() {

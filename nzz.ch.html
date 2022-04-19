@@ -9,9 +9,13 @@
         <meta data-n-head="ssr" name="theme-color" content="#ffffff" />
         <meta data-n-head="ssr" data-hid="ref:policy" name="referrer" content="no-referrer-when-downgrade" />
         <link data-n-head="ssr" rel="dns-prefetch" crossorigin="anonymous" href="//assets.static-nzz.ch" />
-        <style>${NZZ_CSS}</style>
 
-        ${CUSTOM_CSS}
+        <style>${NZZ_CSS}</style>
+        <style>${CUSTOM_CSS}</style>
+
+        ${EXTERNAL_CUSTOM_CSS_LINKS}
+
+        <style>${EXTERNAL_CUSTOM_RAW_CSS}</style>
     </head>
     <body class="regular" data-n-head="%7B%22class%22:%7B%22ssr%22:%22regular%22%7D%7D">
         <div data-server-rendered="true" id="__nzz">
@@ -173,6 +177,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="header-progress"><div class="header-progress__container"><div class="progressbar"><div class="progressbar__line"><div class="progressbar__line--fill" style="transform: translateX(-82.0541%);"></div></div></div></div></div>
                                         <!---->
                                     </div>
                                 </div>
