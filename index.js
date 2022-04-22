@@ -69,7 +69,6 @@ function replaceExternalCustomRawCss(options = {}) {
 }
 
 function replaceExternalCustomCssLinks(options = {}) {
-    console.log(options);
     html = html.replace('${EXTERNAL_CUSTOM_CSS_LINKS}', options.customCssLinks || '');
 }
 
