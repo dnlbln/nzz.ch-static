@@ -20,6 +20,8 @@ function getHtml(options = {}) {
     setTopMaxiBoard();
     setHeaderCustomClasses();
 
+    html = html.replace('${ARTICLE_LAYOUT_CLASS}', 'layout--regular');
+    html = html.replace('${BODY_CLASS}', 'regular');
     html = html.replace('${LEAD}', lead || '');
     html = html.replace('${CONTENT}', content || '');
 
@@ -44,6 +46,8 @@ function getLongFormVisualHtml(options = {}) {
     setTopMaxiBoard('');
     setHeaderCustomClasses('header__stay-on-top--visual');
 
+    html = html.replace('${BODY_CLASS}', 'longformvisual');
+    html = html.replace('${ARTICLE_LAYOUT_CLASS}', 'layout--longformvisual');
     html = html.replace('${LEAD}', lead || '');
     html = html.replace('${CONTENT}', content || '');
 

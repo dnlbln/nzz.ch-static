@@ -17,7 +17,7 @@
 
         <style>${EXTERNAL_CUSTOM_RAW_CSS}</style>
     </head>
-    <body class="regular" data-n-head="%7B%22class%22:%7B%22ssr%22:%22regular%22%7D%7D">
+    <body class="${BODY_CLASS}" data-n-head="%7B%22class%22:%7B%22ssr%22:%22regular%22%7D%7D">
         <div data-server-rendered="true" id="__nzz">
             <div id="__layout">
                 <div
@@ -192,13 +192,11 @@
                                             data-nzz-tid="article"
                                             data-nzz-referrer="articleLink"
                                             data-nzz-article="true"
-                                            class="container container--article layout--regular adnz-infeed-placeholder"
+                                            class="container container--article ${ARTICLE_LAYOUT_CLASS} adnz-infeed-placeholder"
                                         >
                                             ${ARTICLE_HEADER}
 
-                                            <div class="articlecomponent text">
-                                                ${CONTENT}
-                                            </div>
+                                            ${CONTENT}
 
                                             <div
                                                 id="id-doc-1fv5jlfd80"
