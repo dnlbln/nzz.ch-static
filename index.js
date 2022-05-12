@@ -3,131 +3,127 @@ const path = require('path');
 
 let html = '';
 
+/**
+ *
+ * @param {{
+ *   layout: "regular" | "longform-standard" | "longform-visual",
+ *   author: string,
+ *   title: string,
+ *   lead: string,
+ *   content: string
+ * }} options
+ * @returns
+ */
 function getHtml(options = {}) {
     const {
+        layout,
         author,
         title,
         lead,
         content,
+        builtCssFilename,
+        builtJsFilename,
+        customJsLinks,
     } = options;
 
-    loadInitialHtml(options);
+    // Load the layout base.
+    html = fs.readFileSync(path.resolve(__dirname, `src/${layout}/index.html`), 'utf8');
 
-    // Must come after loading initial HTML.
-    setNormalHeader();
-    setArticleTitle(title);
-    setAuthor(author);
-    setTopMaxiBoard();
-    setHeaderCustomClasses();
+    setCss(options);
 
-    html = html.replace('${SPECIAL_PAGEHOLDER_CLASS}', '');
-    html = html.replace('${ARTICLE_LAYOUT_CLASS}', 'layout--regular');
-    html = html.replace('${BODY_CLASS}', 'regular');
-    html = html.replace('${LEAD}', lead || '');
+    html = html.replaceAll('${AUTHOR}', author || 'Author');
+    html = html.replace('${LEAD}', lead || 'Lead');
     html = html.replace('${CONTENT}', content || '');
+    html = html.replaceAll('${TITLE}', title || 'Title');
+
+    html = html.replace('${BUILT_CSS_FILE}', builtCssFilename);
+    html = html.replace('${BUILT_JS_FILE}', builtJsFilename);
+
+    replaceExternalCustomJsLinks(customJsLinks);
+
 
     return html;
 }
 
-function getLongFormVisualHtml(options = {}) {
-    const {
-        author,
-        title,
-        lead,
-        content,
-    } = options;
+function setCss(options) {
+    const layout = options.layout;
 
-    loadInitialHtml(options);
+    // Set the fonts.
+    const nzzFonts = fs.readFileSync(path.resolve(__dirname, 'src/nzz.ch-fonts.css'), 'utf8');
+    html = html.replace('${NZZ_FONTS}', nzzFonts);
 
-    // Must come after loading initial HTML.
-    setLongFormArticleHeader();
-    setArticleTitle(title);
-    setAuthor(author);
+    // Set the css in the HTML.
+    let nzzCSS = fs.readFileSync(path.resolve(__dirname, `src/${layout}/style.css`), 'utf8');
+    html = html.replace('${NZZ_CSS}', nzzCSS);
 
-    setTopMaxiBoard('');
-    setHeaderCustomClasses('header__stay-on-top--visual');
+    // Set custom css we defined in this library to override some styles.
+    const customCSS = fs.readFileSync(path.resolve(__dirname, 'src/nzz.ch-custom.css'), 'utf8');
+    html = html.replace('${CUSTOM_CSS}', customCSS);
 
-    html = html.replace('${SPECIAL_PAGEHOLDER_CLASS}', 'pageholder--disabled');
-    html = html.replace('${BODY_CLASS}', 'longformvisual');
-    html = html.replace('${ARTICLE_LAYOUT_CLASS}', 'layout--longformvisual');
-    html = html.replace('${LEAD}', lead || '');
-    html = html.replace('${CONTENT}', content || '');
+    replaceExternalCustomCssLinks(options.customCssLinks);
 
-    return html;
-}
-
-module.exports = {
-    getHtml,
-    getLongFormVisualHtml,
-};
-
-
-function loadInitialHtml(options = {}) {
-    html = fs.readFileSync(path.resolve(__dirname, 'nzz.ch.html'), 'utf8');
-
-    replaceNzzCSS();
-    replaceExternalCustomCssLinks(options);
-    replaceExternalCustomRawCss(options);
-}
-
-function replaceExternalCustomRawCss(options = {}) {
     html = html.replace('${EXTERNAL_CUSTOM_RAW_CSS}', options.customCssRaw || '');
 }
 
-function replaceExternalCustomCssLinks(options = {}) {
-    html = html.replace('${EXTERNAL_CUSTOM_CSS_LINKS}', options.customCssLinks || '');
-}
+function replaceExternalCustomCssLinks(links = []) {
+    let str = '';
 
-function replaceNzzCSS() {
-    const nzzFonts = fs.readFileSync(path.resolve(__dirname, 'nzz.ch-fonts.css'), 'utf8');
-    const customCSS = fs.readFileSync(path.resolve(__dirname, 'nzz.ch-custom.css'), 'utf8');
-    let nzzCSS = fs.readFileSync(path.resolve(__dirname, 'nzz.ch.css'), 'utf8');
+    for (let i = 0; i < links.length; i++) {
+        const link = links[i];
 
-    // Set the fonts in the css file.
-    nzzCSS = nzzCSS.replace('${NZZ_FONTS}', nzzFonts);
-
-    // Set the css in the HTML.
-    html = html.replace('${NZZ_CSS}', nzzCSS);
-    html = html.replace('${CUSTOM_CSS}', customCSS);
-}
-
-function setNormalHeader() {
-    const header = fs.readFileSync(path.resolve(__dirname, 'normal-headline.html'), 'utf8');
-    html = html.replace('${ARTICLE_HEADER}', header);
-}
-
-function setLongFormArticleHeader() {
-    const header = fs.readFileSync(path.resolve(__dirname, 'longform-header.html'), 'utf8');
-    html = html.replace('${ARTICLE_HEADER}', header);
-}
-
-function setArticleTitle(title) {
-    if (title) {
-        html = html.replaceAll('${TITLE}', title);
-    }
-}
-
-function setAuthor(author) {
-    if (author) {
-        html = html.replaceAll('${AUTHOR}', author);
-    }
-}
-
-function setTopMaxiBoard(custom) {
-    let maxiBoardHtml = '';
-
-    if (typeof custom === 'string') {
-        maxiBoardHtml = custom;
-    } else {
-        maxiBoardHtml = fs.readFileSync(path.resolve(__dirname, 'top-maxiboard.html'), 'utf8');
+        str += `<link rel="stylesheet" type="text/css" href="${link}">`;
     }
 
-    html = html.replaceAll('${TOP_MAXIBOARD}', maxiBoardHtml);
+    html = html.replace('${EXTERNAL_CUSTOM_CSS_LINKS}', str);
 }
 
-function setHeaderCustomClasses(classes = '') {
-    html = html.replaceAll('${HEADER_CUSTOM_CLASSES}', classes);
+function replaceExternalCustomJsLinks(links = []) {
+    let str = '';
+
+    for (let i = 0; i < links.length; i++) {
+        const link = links[i];
+
+        str += `<script src="${link}"></script>`;
+    }
+
+    html = html.replace('${CUSTOM_JS_LINKS}', str);
 }
 
+function createQElement(id, fullWidth = false) {
+    let fwClass = 'widget--fullwidth';
+    if (fullWidth === false) fwClass = '';
 
+    return `
+        <div id="${id}" class="articlecomponent q-embed widget--qembed ${fwClass}"></div>
+    `;
+}
 
+function createFullwidthQElement(id) {
+    return createQElement(id, true);
+}
+
+function createContentWidthQElement(id) {
+    return createQElement(id, false);
+}
+
+function createSubtitle(content = '') {
+    return `
+        <h2 class="subtitle articlecomponent">
+            <span>${content}</span>
+        </h2>
+    `;
+}
+
+function createParagraph(content = '') {
+    return `
+        <p class="articlecomponent text">${content}</p>
+    `;
+}
+
+export {
+    getHtml,
+    createFullwidthQElement,
+    createContentWidthQElement,
+    createSubtitle,
+    createParagraph,
+}
